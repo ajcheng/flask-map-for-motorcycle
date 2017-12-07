@@ -1,0 +1,6 @@
+var provinces = [{% for mapinfo in mapinfos %}{
+	"name": "{{ mapinfo.content }} -- {{ mapinfo.create_time }} -- {{ mapinfo.author.username }}",
+	"center": "{{ mapinfo.position }}",
+	"type": 0,
+	"subDistricts": []
+},{% endfor %}];

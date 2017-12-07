@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script SRC="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/base.css') }}">
+    <style type="text/css">
+      body,html,#container{
+        height: 100%;
+        margin: 0px;
+        font:12px Arial;
+      }
+      .taiwan{
+      	border: solid 1px red;
+      	color: red;
+      	float: left;
+      	width: 50px;
+      	background-color: rgba(255,0,0,0.1)
+      }
+    </style>
+
+</head>
+<body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{{url_for('index') }}">
+              <img class="logo" src="{{ url_for('static',filename='images/logo.png') }}" alt="">
+          </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="{{url_for('index') }}">首页</a></li>
+              <li><a href="{{url_for('add_map') }}">添加地址</a></li>
+              <li><a href="http://lbs.amap.com/console/show/picker" target="view_window">坐标获取</a></li>
+
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+              {% if user %}
+                <li><a href="{{url_for('user',user_id=user.username) }}">{{user.username}}</a></li>
+                <li><a href="{{url_for('logout') }}">注销</a></li>
+              {% else %}
+                <li><a href="{{url_for('regist') }}">注册</a></li>
+                <li><a href="{{url_for('login') }}">登录</a></li>
+              {% endif %}
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+ <div id="container" tabindex="0"></div>
+   <script src="{{url_for('list')}}"></script>
+   <script src="https://webapi.amap.com/maps?v=1.4.0&key=f41b1f9c2d5873e49f5874aba7184c1d"></script>
+   <script type="text/javascript">
+        var map = new AMap.Map('container',{resizeEnable: true,zoom:4});
+        var markers = []; //province见Demo引用的JS文件
+   			var infoWindow = new AMap.InfoWindow({offset:new AMap.Pixel(0,-30)});
+
+        for (var i = 0; i < provinces.length; i += 1) {
+          var marker=new AMap.Marker({
+              position:provinces[i].center.split(','),
+              map:map
+          });
+        marker.content=provinces[i].name;
+        marker.on('click',markerClick);
+        marker.emit('click',{target:marker});
+    }
+    function markerClick(e){
+        infoWindow.setContent(e.target.content);
+        infoWindow.open(map, e.target.getPosition());
+    }
+
+			  map.setFitView();
+    </script>
+    <script type="text/javascript" src="https://webapi.amap.com/demos/js/liteToolbar.js"></script>
+</body>
+</html>

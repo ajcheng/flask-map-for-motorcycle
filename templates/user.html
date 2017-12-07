@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}首页{% endblock %}
+{% block main %}
+    <h3 class="page-title">用户中心</h3>
+    {% for map in mapinfos %}
+    <div class="panel panel-primary">
+        <p><span>坐标：{{ map.position }}</span></p>
+        <p><span>内容：{{ map.content }}</span></p>
+        <p><span>创建时间：{{ map.create_time }}</span></p>
+    </div>
+    <hr>
+    {% endfor %}
+
+{% endblock %}
